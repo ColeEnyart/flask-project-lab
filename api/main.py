@@ -1,6 +1,7 @@
-from flask import Flask, jsonify
+from flask import Flask
 import psycopg2
 from settings import DB_NAME, USER_NAME
+from api.models.car import Car
 
 app = Flask(__name__)
 
@@ -15,7 +16,8 @@ def venues():
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM cars;')
     cars = cursor.fetchall()
-    return jsonify(cars)
+    car_objs = [Car(car).__dict__ for car in cars]
+    return car_objs
 
 @app.route('/cars/<id>')
 def show_venue(id):
@@ -23,4 +25,6 @@ def show_venue(id):
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM cars WHERE id = %s LIMIT 1;", id)
     car = cursor.fetchone()
-    return jsonify(car)
+    car_obj = Car(car).__dict__
+    return car_obj
+

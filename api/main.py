@@ -17,11 +17,11 @@ def cars():
     cursor.execute("SELECT * FROM cars;")
     cars = cursor.fetchall()
     car_objs = [Car(car).__dict__ for car in cars]
-    if request.args.get('column') and (request.args.get('more') or request.args.get('less')):
+    if request.args.get('column') and (request.args.get('start') or request.args.get('stop')):
         column = request.args.get('column')
-        more = request.args.get('more')
-        less = request.args.get('less')
-        return Car.filter_column(cursor, column, more, less)
+        start = request.args.get('start')
+        stop = request.args.get('stop')
+        return Car.filter_column(cursor, column, start, stop)
     if request.args.get('column'):
         column = request.args.get('column')
         return Car.select_column(cursor, column)

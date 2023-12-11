@@ -14,13 +14,13 @@ class Car():
         return 'NO COLUMN IN TABLE'
     
     @classmethod
-    def filter_column(self, cursor, column, more = False, less = False):
+    def filter_column(self, cursor, column, start = False, stop = False):
         if column in ['id', 'battery', 'efficiency', 'range', 'top_speed', 'acceleration']:
-            if more and less:
-                cursor.execute(f"SELECT * FROM cars WHERE {column} > {more} AND {column} < {less};")
+            if start and stop:
+                cursor.execute(f"SELECT * FROM cars WHERE {column} >= {start} AND {column} <= {stop};")
             else:
-                compare = '>' if more else '<'
-                cursor.execute(f"SELECT * FROM cars WHERE {column} {compare} {more or less};")
+                compare = '>=' if start else '<='
+                cursor.execute(f"SELECT * FROM cars WHERE {column} {compare} {start or stop};")
             records = cursor.fetchall()
             return [dict(zip(self.columns, record)) for record in records]
         return 'INVALID COLUMN FOR FILTER BY NUMBER'

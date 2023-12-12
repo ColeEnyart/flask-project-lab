@@ -14,18 +14,19 @@ class Car():
         return 'NO COLUMN IN TABLE'
     
     @classmethod
-    def filter_column(self, cursor, column, start = None, stop = None):
+    def splice_column(self, cursor, column, start = None, stop = None):
         if column in ['id', 'battery', 'efficiency', 'range', 'top_speed', 'acceleration']:
-            self.start_stop(cursor, column, start, stop)
+            Car.start_stop(cursor, column, start, stop)
             records = cursor.fetchall()
             return [dict(zip(self.columns, record)) for record in records]
-        return 'INVALID COLUMN FOR FILTER BY NUMBER'
+        return 'INVALID COLUMN FOR SPLICING'
     
+    @staticmethod
     def start_stop(cursor, column, start = None, stop = None):
         if start and stop:
-            return cursor.execute(f"SELECT * FROM cars WHERE {column} >= {start} AND {column} <= {stop};")
+            return cursor.execute(f"SELECT * FROM cars WHERE {column} >= %s AND {column} <= %s;", (start, stop))
         if start:
-            return cursor.execute(f"SELECT * FROM cars WHERE {column} >= {start};")
+            return cursor.execute(f"SELECT * FROM cars WHERE {column} >= %s;", (start,))
         if stop:
-            return cursor.execute(f"SELECT * FROM cars WHERE {column} <= {stop};")
+            return cursor.execute(f"SELECT * FROM cars WHERE {column} <= %s;", (stop,))
         

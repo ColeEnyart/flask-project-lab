@@ -31,11 +31,11 @@ def test_select_column(psql_conn):
     assert json.dumps(car[:3]) == json.dumps([{"battery": 75}, {"battery": 57.5}, {"battery": 60.5}])
 
 def test_filter_column_is_filterable(psql_conn):
-    car = Car.filter_column(psql_conn, 'baery')
-    assert car == 'INVALID COLUMN FOR FILTER BY NUMBER'
+    car = Car.splice_column(psql_conn, 'baery')
+    assert car == 'INVALID COLUMN FOR SPLICING'
     
 def test_filter_column_start_and_stop(psql_conn):
-    car = Car.filter_column(psql_conn, 'id', 3, 4)
+    car = Car.splice_column(psql_conn, 'id', 3, 4)
     assert json.dumps(car) == json.dumps([{
             "id": 3,
             "battery": 60.5,
@@ -60,7 +60,7 @@ def test_filter_column_start_and_stop(psql_conn):
             "acceleration": 7.9}])   
     
 def test_filter_column_start(psql_conn):
-    car = Car.filter_column(psql_conn, 'id', 359)
+    car = Car.splice_column(psql_conn, 'id', 359)
     assert json.dumps(car) == json.dumps([{
             "id": 359,
             "battery": 68,
@@ -85,7 +85,7 @@ def test_filter_column_start(psql_conn):
             "acceleration": 12.1}])
 
 def test_filter_column_stop(psql_conn):
-    car = Car.filter_column(psql_conn, 'id', stop=2)
+    car = Car.splice_column(psql_conn, 'id', stop=2)
     assert json.dumps(car) == json.dumps([{
             "id": 1,
             "battery": 75,

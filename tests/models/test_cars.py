@@ -28,7 +28,7 @@ def test_select_column_in_table(psql_conn):
         
 def test_select_column(psql_conn):
     car = Car.select_column(psql_conn, 'battery')
-    assert json.dumps(car[:3]) == json.dumps([{"b": 75}, {"b": 57.5}, {"b": 60.5}])
+    assert json.dumps(car[:3]) == json.dumps([{"battery": 75}, {"battery": 57.5}, {"battery": 60.5}])
 
 def test_filter_column_is_filterable(psql_conn):
     car = Car.filter_column(psql_conn, 'baery')

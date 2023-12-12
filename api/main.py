@@ -17,14 +17,11 @@ def cars():
     cursor.execute("SELECT * FROM cars;")
     cars = cursor.fetchall()
     car_objs = [Car(car).__dict__ for car in cars]
-    if request.args.get('column') and (request.args.get('start') or request.args.get('stop')):
-        column = request.args.get('column')
-        start = request.args.get('start')
-        stop = request.args.get('stop')
-        return Car.filter_column(cursor, column, start, stop)
-    if request.args.get('column'):
-        column = request.args.get('column')
-        return Car.select_column(cursor, column)
+    all_args = request.args.to_dict()
+    if all_args.get('column') and (all_args.get('start') or all_args.get('stop')):
+        return Car.filter_column(cursor, all_args.get('column'), all_args.get('start'), all_args.get('stop'))
+    if all_args.get('column'):
+        return Car.select_column(cursor, all_args.get('column'))
     return car_objs
 
 @app.route('/cars/<id>')
